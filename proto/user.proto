@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package user;
+option go_package = "./pb";
+
+message UserModel{
+  // @inject_tag: json:"id" form:"id"
+  uint32 id = 1;
+  // @inject_tag: json:"user_name" form:"user_name"
+  string user_name = 2;
+  // @inject_tag: json:"created_at"
+  int64 created_at = 3;
+  // @inject_tag: json:"updated_at"
+  int64 updated_at = 4;
+  // @inject_tag: json:"deleted_at"
+  int64 deleted_at = 5;
+}
+
+//注册
+message SignUpReq{
+  string name = 1;
+  string password = 2;
+  string password_confirm = 3;
+}
+message SignUpResp{
+  UserModel user = 1;
+  uint32 code = 2;
+}
+
+//登录
+message LoginReq {
+  string name = 1;
+  string password = 2;
+  string password_confirm = 3;
+}
+message LoginResp {
+  UserModel user = 1;
+  uint32 code = 2;
+}
+
+service UserService{
+  rpc Login(LoginReq) returns(LoginResp);
+  rpc Signup(SignUpReq) returns(SignUpResp);
+}
