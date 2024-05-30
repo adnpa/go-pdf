@@ -5,8 +5,8 @@ import (
 	"errors"
 	"github.com/adnpa/gpdf/app/user/model"
 	"github.com/adnpa/gpdf/app/user/query"
+	"github.com/adnpa/gpdf/enums"
 	"github.com/adnpa/gpdf/proto/pb"
-	"github.com/adnpa/gpdf/types"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -24,15 +24,15 @@ func GetUserSrv() *UserSrv {
 }
 
 func (u *UserSrv) Login(ctx context.Context, req *pb.LoginReq, resp *pb.LoginResp) (err error) {
-	resp.Code = types.SUCCESS
+	resp.Code = enums.SUCCESS
 	user, err := query.NewUserDao(ctx).FindUserByUserName(req.Name)
 	if err != nil {
-		resp.Code = types.ERROR
+		resp.Code = enums.ERROR
 		return
 	}
 
 	if !user.CheckPassword(req.Password) {
-		resp.Code = types.InvalidParams
+		resp.Code = enums.InvalidParams
 		return
 	}
 
@@ -41,17 +41,17 @@ func (u *UserSrv) Login(ctx context.Context, req *pb.LoginReq, resp *pb.LoginRes
 }
 
 func (u *UserSrv) Signup(ctx context.Context, req *pb.SignUpReq, resp *pb.SignUpResp) (err error) {
-	if req.Password != req.PasswordConfirm {
+	if req.Password != req.ConfirmPassword {
 		err = errors.New("两次密码输入不一致")
 		return
 	}
-	resp.Code = types.SUCCESS
+	resp.Code = enums.SUCCESS
 	_, err = query.NewUserDao(ctx).FindUserByUserName(req.Name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) { // 如果不存在就继续下去
 			// ...continue
 		} else {
-			resp.Code = types.ERROR
+			resp.Code = enums.ERROR
 			return
 		}
 	}
@@ -60,11 +60,11 @@ func (u *UserSrv) Signup(ctx context.Context, req *pb.SignUpReq, resp *pb.SignUp
 	}
 	// 加密密码
 	if err = user.SetPassword(req.Password); err != nil {
-		resp.Code = types.ERROR
+		resp.Code = enums.ERROR
 		return
 	}
 	if err = query.NewUserDao(ctx).CreateUser(user); err != nil {
-		resp.Code = types.ERROR
+		resp.Code = enums.ERROR
 		return
 	}
 

@@ -1,4 +1,4 @@
-package types
+package enums
 
 const (
 	SUCCESS       = 200

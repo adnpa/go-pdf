@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "a2616dea-4b30-46d5-8f63-43ffbec179d1",
+		"name": "gpdf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34940686"
+	},
+	"item": [
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"abca\",\r\n  \"password\": \"123456\",\r\n  \"confirm_password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/v1/signup",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"abca\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/v1/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "split",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFiY2EiLCJpc3MiOiJzcmJicyIsImV4cCI6MTcxNzEzMzAzN30.4oHbLoZzEj4njDmFicFIeCybOQdFpJcFtvGvaSBta4Q"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "page",
+							"value": "1",
+							"description": "要按照page切分时填",
+							"type": "text"
+						},
+						{
+							"key": "span",
+							"value": "1",
+							"description": "要指定span时填",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/note/编程/Golang/项目/pdf处理/老人与海.pdf"
+						},
+						{
+							"key": "page",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/v1/split",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"split"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "merge",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFiY2EiLCJpc3MiOiJzcmJicyIsImV4cCI6MTcxNzEzMzAzN30.4oHbLoZzEj4njDmFicFIeCybOQdFpJcFtvGvaSBta4Q"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file[]",
+							"type": "file",
+							"src": "/C:/note/编程/Golang/项目/pdf处理/老人与海.pdf"
+						},
+						{
+							"key": "file[]",
+							"type": "file",
+							"src": "/C:/note/编程/Golang/项目/pdf处理/老人与海.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/v1/merge",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"merge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addwatermark",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFiY2EiLCJpc3MiOiJzcmJicyIsImV4cCI6MTcxNzEzMjQ0OX0.r_GXDsn8y56XmdjJSmkF2RYl4kFUNi8kX29Cqk7LQvw"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "honghangzhi",
+							"type": "text"
+						},
+						{
+							"key": "pages",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/note/编程/Golang/项目/pdf处理/老人与海.pdf"
+						},
+						{
+							"key": "pages",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/v1/addwatermark",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"addwatermark"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

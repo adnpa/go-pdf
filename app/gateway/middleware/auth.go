@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"fmt"
+	"github.com/adnpa/gpdf/app/gateway/handler"
+	"github.com/adnpa/gpdf/enums"
+	"github.com/adnpa/gpdf/pkg/utils"
 	"github.com/gin-gonic/gin"
-	"srbbs/src/enums"
-	"srbbs/src/handler"
-	"srbbs/src/util/jwt"
 )
 
 // JWTAuthMiddleware 基于jwt的授权中间件
@@ -13,7 +13,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		aToken, _ := handler.ParseJwtHeader(c)
 		// 处理
-		claims, err := jwt.ParseToken(aToken)
+		claims, err := utils.ParseToken(aToken)
 		if err != nil {
 			fmt.Println(err)
 			handler.ResponseError(c, enums.CodeInvalidToken)

@@ -36,11 +36,9 @@ func NewPdfServiceEndpoints() []*api.Endpoint {
 // Client API for PdfService service
 
 type PdfService interface {
-	CreatePdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error)
-	GetPdfsList(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfListResponse, error)
-	GetPdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error)
-	UpdatePdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error)
-	DeletePdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error)
+	Split(ctx context.Context, in *SplitReq, opts ...client.CallOption) (*SplitResp, error)
+	Merge(ctx context.Context, in *MergeReq, opts ...client.CallOption) (*MergeResp, error)
+	AddWaterMark(ctx context.Context, in *AddWaterMarkReq, opts ...client.CallOption) (*AddWaterMarkResp, error)
 }
 
 type pdfService struct {
@@ -55,9 +53,9 @@ func NewPdfService(name string, c client.Client) PdfService {
 	}
 }
 
-func (c *pdfService) CreatePdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error) {
-	req := c.c.NewRequest(c.name, "PdfService.CreatePdf", in)
-	out := new(PdfDetailResponse)
+func (c *pdfService) Split(ctx context.Context, in *SplitReq, opts ...client.CallOption) (*SplitResp, error) {
+	req := c.c.NewRequest(c.name, "PdfService.Split", in)
+	out := new(SplitResp)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -65,9 +63,9 @@ func (c *pdfService) CreatePdf(ctx context.Context, in *PdfRequest, opts ...clie
 	return out, nil
 }
 
-func (c *pdfService) GetPdfsList(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfListResponse, error) {
-	req := c.c.NewRequest(c.name, "PdfService.GetPdfsList", in)
-	out := new(PdfListResponse)
+func (c *pdfService) Merge(ctx context.Context, in *MergeReq, opts ...client.CallOption) (*MergeResp, error) {
+	req := c.c.NewRequest(c.name, "PdfService.Merge", in)
+	out := new(MergeResp)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,29 +73,9 @@ func (c *pdfService) GetPdfsList(ctx context.Context, in *PdfRequest, opts ...cl
 	return out, nil
 }
 
-func (c *pdfService) GetPdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error) {
-	req := c.c.NewRequest(c.name, "PdfService.GetPdf", in)
-	out := new(PdfDetailResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *pdfService) UpdatePdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error) {
-	req := c.c.NewRequest(c.name, "PdfService.UpdatePdf", in)
-	out := new(PdfDetailResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *pdfService) DeletePdf(ctx context.Context, in *PdfRequest, opts ...client.CallOption) (*PdfDetailResponse, error) {
-	req := c.c.NewRequest(c.name, "PdfService.DeletePdf", in)
-	out := new(PdfDetailResponse)
+func (c *pdfService) AddWaterMark(ctx context.Context, in *AddWaterMarkReq, opts ...client.CallOption) (*AddWaterMarkResp, error) {
+	req := c.c.NewRequest(c.name, "PdfService.AddWaterMark", in)
+	out := new(AddWaterMarkResp)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -108,20 +86,16 @@ func (c *pdfService) DeletePdf(ctx context.Context, in *PdfRequest, opts ...clie
 // Server API for PdfService service
 
 type PdfServiceHandler interface {
-	CreatePdf(context.Context, *PdfRequest, *PdfDetailResponse) error
-	GetPdfsList(context.Context, *PdfRequest, *PdfListResponse) error
-	GetPdf(context.Context, *PdfRequest, *PdfDetailResponse) error
-	UpdatePdf(context.Context, *PdfRequest, *PdfDetailResponse) error
-	DeletePdf(context.Context, *PdfRequest, *PdfDetailResponse) error
+	Split(context.Context, *SplitReq, *SplitResp) error
+	Merge(context.Context, *MergeReq, *MergeResp) error
+	AddWaterMark(context.Context, *AddWaterMarkReq, *AddWaterMarkResp) error
 }
 
 func RegisterPdfServiceHandler(s server.Server, hdlr PdfServiceHandler, opts ...server.HandlerOption) error {
 	type pdfService interface {
-		CreatePdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error
-		GetPdfsList(ctx context.Context, in *PdfRequest, out *PdfListResponse) error
-		GetPdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error
-		UpdatePdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error
-		DeletePdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error
+		Split(ctx context.Context, in *SplitReq, out *SplitResp) error
+		Merge(ctx context.Context, in *MergeReq, out *MergeResp) error
+		AddWaterMark(ctx context.Context, in *AddWaterMarkReq, out *AddWaterMarkResp) error
 	}
 	type PdfService struct {
 		pdfService
@@ -134,22 +108,14 @@ type pdfServiceHandler struct {
 	PdfServiceHandler
 }
 
-func (h *pdfServiceHandler) CreatePdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error {
-	return h.PdfServiceHandler.CreatePdf(ctx, in, out)
+func (h *pdfServiceHandler) Split(ctx context.Context, in *SplitReq, out *SplitResp) error {
+	return h.PdfServiceHandler.Split(ctx, in, out)
 }
 
-func (h *pdfServiceHandler) GetPdfsList(ctx context.Context, in *PdfRequest, out *PdfListResponse) error {
-	return h.PdfServiceHandler.GetPdfsList(ctx, in, out)
+func (h *pdfServiceHandler) Merge(ctx context.Context, in *MergeReq, out *MergeResp) error {
+	return h.PdfServiceHandler.Merge(ctx, in, out)
 }
 
-func (h *pdfServiceHandler) GetPdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error {
-	return h.PdfServiceHandler.GetPdf(ctx, in, out)
-}
-
-func (h *pdfServiceHandler) UpdatePdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error {
-	return h.PdfServiceHandler.UpdatePdf(ctx, in, out)
-}
-
-func (h *pdfServiceHandler) DeletePdf(ctx context.Context, in *PdfRequest, out *PdfDetailResponse) error {
-	return h.PdfServiceHandler.DeletePdf(ctx, in, out)
+func (h *pdfServiceHandler) AddWaterMark(ctx context.Context, in *AddWaterMarkReq, out *AddWaterMarkResp) error {
+	return h.PdfServiceHandler.AddWaterMark(ctx, in, out)
 }

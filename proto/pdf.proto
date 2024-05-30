@@ -1,69 +1,39 @@
-syntax="proto3";
-package services;
+syntax = "proto3";
+package pdf;
 option go_package = "./pb";
 
-message PdfModel{
-  //@inject_tag: json:"id" form:"id"
-  uint64 id = 1;
-  //@inject_tag: json:"uid" form:"uid"
-  uint64 uid = 2;
-  //@inject_tag: json:"title" form:"title"
-  string title = 3;
-  //@inject_tag: json:"content" form:"content"
-  string content = 4;
-  //@inject_tag: json:"start_time" form:"start_time"
-  int64 start_time = 5;
-  //@inject_tag: json:"end_time" form:"end_time"
-  int64 end_time = 6;
-  //@inject_tag: json:"status" form:"status"
-  int64 status = 7;
-  //@inject_tag: json:"create_time" form:"create_time"
-  int64 create_time = 8;
-  //@inject_tag: json:"update_time" form:"update_time"
-  int64 update_time = 9;
+//切分
+message SplitReq{
+  repeated string page = 1;
+  int64 span = 2;
+  string file = 3;
+}
+message SplitResp{
+  uint32 code = 1;
 }
 
-message PdfRequest{
-  //@inject_tag: json:"id" form:"id"
-  uint64 id = 1;
-  //@inject_tag: json:"uid" form:"uid"
-  uint64 uid = 2;
-  //@inject_tag: json:"title" form:"title"
-  string title = 3;
-  //@inject_tag: json:"content" form:"content"
-  string content = 4;
-  //@inject_tag: json:"start_time" form:"start_time"
-  int64 start_time = 5;
-  //@inject_tag: json:"end_time" form:"end_time"
-  int64 end_time = 6;
-  //@inject_tag: json:"status" form:"status"
-  int64 status = 7;
-  // @inject_tag: json:"start" form:"start"
-  uint32 start = 8;
-  // @inject_tag: json:"limit" form:"limit"
-  uint32 limit = 9;
+//合并
+message MergeReq{
+  repeated string files = 1;
+}
+message MergeResp{
+  string file = 1  ;
+  uint32 code = 2;
 }
 
-message PdfListResponse{
-  // @inject_tag: json:"Pdf_list"
-  repeated PdfModel Pdf_list=1;
-  // @inject_tag: json:"count"
-  uint32 count=2;
-  // @inject_tag: json:"code"
-  uint32 code=3;
+//加水印
+message AddWaterMarkReq{
+  string text = 1;
+  string file = 2;
+  repeated string  pages = 3;
 }
-
-message PdfDetailResponse{
-  // @inject_tag: json:"Pdf_detail"
-  PdfModel Pdf_detail=1;
-  // @inject_tag: json:"code"
-  uint32 code=2;
+message AddWaterMarkResp{
+  string file = 1;
+  uint32 code = 2;
 }
 
 service PdfService{
-  rpc CreatePdf(PdfRequest) returns(PdfDetailResponse);
-  rpc GetPdfsList(PdfRequest) returns(PdfListResponse);
-  rpc GetPdf(PdfRequest) returns(PdfDetailResponse);
-  rpc UpdatePdf(PdfRequest) returns(PdfDetailResponse);
-  rpc DeletePdf(PdfRequest) returns(PdfDetailResponse);
+  rpc Split(SplitReq) returns(SplitResp);
+  rpc Merge(MergeReq) returns(MergeResp);
+  rpc AddWaterMark(AddWaterMarkReq) returns(AddWaterMarkResp);
 }

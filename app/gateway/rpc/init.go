@@ -1,8 +1,8 @@
 package rpc
 
 import (
-	"github.com/adnpa/gpdf/proto/enums/pb"
-	"github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/adnpa/gpdf/app/gateway/wrappers"
+	"github.com/adnpa/gpdf/proto/pb"
 	"go-micro.dev/v4"
 )
 
@@ -18,11 +18,11 @@ func InitRPC() {
 		micro.WrapClient(wrappers.NewUserWrapper),
 	)
 	// 用户服务调用实例
-	UserService := pb.NewUserService("rpcUserService", userMicroService.Client())
+	UserService = pb.NewUserService("rpcUserService", userMicroService.Client())
 	// pdf工具服务
 	pdfService := micro.NewService(
 		micro.Name("taskService.client"),
-		micro.WrapClient(wrappers.NewTaskWrapper),
+		micro.WrapClient(wrappers.NewPdfWrapper),
 	)
-	PdfService := pb.NewPdfService("rpcTaskService", pdfService.Client())
+	PdfService = pb.NewPdfService("rpcPdfService", pdfService.Client())
 }

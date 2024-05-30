@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/adnpa/gpdf/enums"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"srbbs/src/enums"
 )
 
 type ResponseData struct {

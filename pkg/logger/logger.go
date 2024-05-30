@@ -1,8 +1,9 @@
-package srlogger
+package logger
 
 import (
 	conf "github.com/adnpa/gpdf/config"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"log"
 )

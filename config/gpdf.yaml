@@ -9,7 +9,7 @@ jwt_key: "UubMLwC+SKs2xvGVgjXLLa0p+x1Q69kN82/U+E/+lSg="
 
 mysql:
   #  host: 172.19.0.3
-  host: localhost
+  host: 192.168.183.130
   user: gpdf
   password: 123456
   dbname: gpdf
@@ -35,7 +35,7 @@ redis:
 
 log:
   level: "debug"
-  filename: "./log/gpdf.log"
+  filename: "./logs/gpdf.log"
   max_size: 500
   max_backups: 3
   max_age: 28
@@ -43,7 +43,7 @@ log:
 
 etcd:
   host: 192.168.183.130
-  port: 5672
+  port: 2379
 
 server:
   user_srv_address: 127.0.0.1:8082

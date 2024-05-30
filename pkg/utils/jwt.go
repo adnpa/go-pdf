@@ -1,11 +1,11 @@
 package utils
 
 import (
-	"errors"
-	"github.com/dgrijalva/jwt-go"
-	conf "gpdf/config"
+	"github.com/adnpa/gpdf/config"
+	logger "github.com/adnpa/gpdf/pkg/logger"
+	"github.com/golang-jwt/jwt/v5"
+	"go.uber.org/zap"
 	"log"
-	//"srbbs/src/conf"
 	"time"
 )
 
@@ -42,25 +42,6 @@ func keyFunc(token *jwt.Token) (interface{}, error) {
 	return []byte(conf.Cfg.JwtKey), nil
 }
 
-//func (claims *MyCustomClaims) GetExpirationTime() (*NumericDate, error) {
-//
-//}
-//func (claims *MyCustomClaims) GetIssuedAt() (*NumericDate, error) {
-//
-//}
-//func (claims *MyCustomClaims) GetNotBefore() (*NumericDate, error) {
-//
-//}
-//func (claims *MyCustomClaims) GetIssuer() (string, error) {
-//
-//}
-//func (claims *MyCustomClaims) GetSubject() (string, error) {
-//
-//}
-//func (claims *MyCustomClaims) GetAudience() (ClaimStrings, error) {
-//
-//}
-
 func GenToken(userID uint64, username string) (aToken, rToken string, err error) {
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
@@ -83,7 +64,7 @@ func GenToken(userID uint64, username string) (aToken, rToken string, err error)
 	//rToken不需要自定义字段
 	token = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp": time.Now().Add(RefreshTokenExpireDuration).Unix(),
-		"iss": "srbbs",
+		"iss": "gpdf",
 	})
 	rToken, err = token.SignedString([]byte(conf.Cfg.JwtKey))
 	return
@@ -93,8 +74,7 @@ func ParseToken(tokenString string) (claims *MyCustomClaims, err error) {
 	claims = &MyCustomClaims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, keyFunc)
 	if err != nil {
-		//srlogger.Logger().Info("error parse token", zap.Error(err))
-
+		logger.Logger().Info("error parse token", zap.Error(err))
 	} else if _, ok := token.Claims.(*MyCustomClaims); ok {
 		return
 	} else {
@@ -104,18 +84,18 @@ func ParseToken(tokenString string) (claims *MyCustomClaims, err error) {
 }
 
 // RefreshToken 刷新AccessToken
-func RefreshToken(aToken, rToken string) (newAToken, newRToken string, err error) {
-	// rToken失效直接return 这里用不带claims的Parse方法
-	if _, err = jwt.Parse(rToken, keyFunc); err != nil {
-		return
-	}
-
-	//var claims *jwt.MapClaims
-	claims, err := ParseToken(aToken)
-
-	// 当access token是过期错误 并且 refresh token没有过期时就创建一个新的access token
-	if errors.Is(err, jwt.ErrTokenExpired) {
-		return GenToken(claims.UserID, claims.Username)
-	}
-	return
-}
+//func RefreshToken(aToken, rToken string) (newAToken, newRToken string, err error) {
+//	// rToken失效直接return 这里用不带claims的Parse方法
+//	if _, err = jwt.Parse(rToken, keyFunc); err != nil {
+//		return
+//	}
+//
+//	//var claims *jwt.MapClaims
+//	claims, err := ParseToken(aToken)
+//
+//	// 当access token是过期错误 并且 refresh token没有过期时就创建一个新的access token
+//	if errors.Is(err, jwt.ErrTokenExpired) {
+//		return GenToken(claims.UserID, claims.Username)
+//	}
+//	return
+//}
