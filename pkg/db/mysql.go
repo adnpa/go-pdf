@@ -28,6 +28,7 @@ func init() {
 	sqldb.SetMaxIdleConns(conf.Cfg.MaxIdleConns)
 	// gorm设置db
 	//query.SetDefault(db)
+	migration()
 	return
 }
 

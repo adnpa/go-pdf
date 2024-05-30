@@ -2,11 +2,11 @@ networks:
   #  front-tier:
   gpdf-back-tier:
     driver: bridge
-    
+
 services:
   mysql:
     container_name: mysql
-    image: mysql:latest
+    image: "mysql:latest"
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -25,7 +25,7 @@ services:
       - gpdf-back-tier
 
   etcd:
-    image: "quay.io/coreos/etcd:v3.5.5"
+    image: "bitnami/etcd:3.5.14"
     container_name: etcd
     restart: on-failure
     privileged: true
@@ -34,7 +34,7 @@ services:
     environment:
       - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
       - ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379
-      - "ALLOW_NONE_AUTHENTICATION=yes"
+      - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_API=3
       - ETCD_CERT_FILE="/path/to/server.crt"
       - ETCD_KEY_FILE="/path/to/server.key"
@@ -60,7 +60,7 @@ services:
       - gpdf-back-tier
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: "rabbitmq:3-management"
     container_name: rabbitmq
     ports:
       - "5672:5672"  # AMQP 端口
@@ -73,7 +73,7 @@ services:
 
   redis:
     container_name: redis
-    image: redis:latest
+    image: "redis:latest"
     restart: always
     environment:
       - REDIS_PASSWORD=micro_gpdf-back-tier
